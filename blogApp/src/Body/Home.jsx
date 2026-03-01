@@ -45,6 +45,7 @@ const Home = () => {
     });
   }, []);
 
+  const filtered = results.filter(game => game.reviews_count > 500);
 
   return (
     <div className="w-full px-4 md:px-8 mt-6">
@@ -54,7 +55,7 @@ const Home = () => {
         slidesPerView={1}
         navigation
         autoplay={{ delay: 3000 }}
-        className="rounded-3xl overflow-hidden shadow-2xl"
+        className="rounded-3xl overflow-hidden shadow-2xl mb-10"
       >
         {Categories.map((item) => (
           <SwiperSlide key={item.id}>
@@ -90,9 +91,9 @@ const Home = () => {
       </Swiper>
       <div className="text-center my-10" data-aos="fade-up"
   data-aos-duration="1500" >
-        <h1 className="text-3xl underline font-bold mb-5">Featured Games</h1>
+        <h1 className="text-3xl font-bold mb-5">Featured Games</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-        {results.slice(0, 6).map((game) => (
+        {filtered.slice(0, 6).map((game) => (
           <div
             key={game.id}
             className="bg-gray-900 rounded-xl overflow-hidden shadow-lg"
@@ -112,6 +113,7 @@ const Home = () => {
         ))}
       </div>
        </div>
+       
     </div>
   );
 };
