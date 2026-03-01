@@ -7,6 +7,7 @@ import "aos/dist/aos.css";
 import { useState,useEffect } from "react";
 import { MoveUpIcon } from "lucide-react";
 import Contact from "./Body/Contact";
+import Footer from "./Footer/Footer";
 
 function App() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -42,6 +43,7 @@ function App() {
       {isVisible && (
         <button onClick={scrollToTop} className="fixed bottom-6 right-6 bg-red-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition"><MoveUpIcon size={20}/></button>
       )}
+      <Footer />
     </BrowserRouter>
       )
 }
