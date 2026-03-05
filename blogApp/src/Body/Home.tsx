@@ -15,14 +15,24 @@ import { Categories } from "@/collection/Catogories";
 import { useState, useEffect } from "react";
 import { Api_key } from "@/Api";
 import AOS from "aos";
-import Contact from "./Contact";
+
+
+type Game = {
+  id: number;
+  name: string;
+  background_image: string;
+  rating: number;
+  reviews_count: number;
+}
 
 
 const Home = () => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Game[]>([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
+
       try {
         const response = await fetch(
           `https://api.rawg.io/api/games?key=${Api_key}`,
@@ -40,7 +50,7 @@ const Home = () => {
 
   useEffect(() => {
     AOS.init({
-      duration: 2000, // default duration
+      duration: 1500, // default duration
       once: true,     // animation happens only once
       easing: "ease-in-out",
     });
@@ -90,6 +100,7 @@ const Home = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+
       <div className="text-center my-10 h-[100vh]" data-aos="fade-up"
   data-aos-duration="1500" >
         <h1 className="text-4xl font-bold mb-5">Featured Games</h1>

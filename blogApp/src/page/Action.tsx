@@ -12,13 +12,25 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { Skeleton } from "@/components/ui/skeleton"
+
+type Game = {
+  id: number;
+  name: string;
+  rating: number;
+  background_image: string;
+  reviews_count: number;
+  description_raw: string;
+};
 
 const Action = () => {
-  const [actionGames, setActionGames] = useState<any[]>([]);
+  const [actionGames, setActionGames] = useState<Game[]>([]);
   const [page, setPage] = useState(1); 
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         const response = await fetch(
           `https://api.rawg.io/api/games?key=${Api_key}&genres=action&page=${page}&page_size=20`
@@ -27,6 +39,8 @@ const Action = () => {
         setActionGames(data.results);
       } catch (error) {
         console.error("Error fetching action games", error);
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -42,9 +56,12 @@ const Action = () => {
       <h1 className="font-extrabold text-5xl text-center my-10">
         ACTION
       </h1>
-
-   
-      <div className="w-full px-4 md:px-8 mt-6 ">
+      {loading ? (
+        <div className="w-full px-4 md:px-8 mt-6 ">
+          <Skeleton className="w-full h-[70vh] md:h-[80vh] rounded-3xl bg-gray-500" />
+        </div>  
+      ) : (
+        <div className="w-full px-4 md:px-8 mt-6 ">
         <Swiper
           modules={[Navigation, Autoplay, Pagination, Scrollbar, A11y]}
           spaceBetween={20}
@@ -78,11 +95,12 @@ const Action = () => {
           ))}
         </Swiper>
       </div>
-
-      
+      )}
+   
       <p className="font-bold text-2xl">Popular Titles</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 mx-5">
+
         {filtered.slice(10, 19).map((game) => (
           <div
             key={game.id}

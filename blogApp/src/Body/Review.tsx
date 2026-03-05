@@ -1,5 +1,6 @@
 import { Api_key } from "@/Api";
 import { useState, useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Game = {
   id: number;
@@ -13,9 +14,11 @@ type Game = {
 const Review = () => {
   const [review, setReview] = useState<Game[]>([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReview = async () => {
+      setLoading(true);
       try {
         const response = await fetch(
           `https://api.rawg.io/api/games?key=${Api_key}&page=${page}&page_size=20`
@@ -28,6 +31,8 @@ const Review = () => {
         console.log(data.results[0]);
       } catch (error) {
         console.error("Error fetching review data", error);
+      }finally{
+        setLoading(false);
       }
     };
 
@@ -47,8 +52,16 @@ const Review = () => {
         </p>
       </div>
 
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {
+        loading ?  (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {Array.from({length: 10}).map((_, index) =>(
+              <Skeleton  key={index} className="w-full rounded-2xl h-32 bg-gray-500" />
+            ))}
+          </div>
+        ):
+        (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
         {review.slice(0, 10).map((item) => (
           <div
             key={item.id}
@@ -90,6 +103,10 @@ const Review = () => {
           </div>
         ))}
       </div>
+        )
+      }
+      
+    
 
       
       <div className="flex justify-center items-center gap-6 mt-16">
