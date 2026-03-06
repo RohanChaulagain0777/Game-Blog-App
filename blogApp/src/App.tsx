@@ -11,7 +11,7 @@ import Footer from "./Footer/Footer";
 import Horror from "./page/Horror";
 import Action from "./page/Action";
 import Sci_fi from "./page/Sci-Fi";
-import BestIndies  from "./page/BestIndies ";
+import BestIndies  from "./page/BestIndies";
 
 function App() {
   const [isVisible, setIsVisible] = useState<boolean>(false);

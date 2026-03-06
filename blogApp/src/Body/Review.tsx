@@ -1,6 +1,7 @@
 import { Api_key } from "@/Api";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 
 type Game = {
   id: number;
@@ -11,33 +12,31 @@ type Game = {
   background_image: string;
 };
 
+const fetchReviews = async (page: number) =>{
+  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}&page=${page}&page_size=20`
+  );
+
+  if(!response.ok){
+    throw new Error("Failed to fetch reviews");
+  }
+
+  return response.json();
+}
+
 const Review = () => {
-  const [review, setReview] = useState<Game[]>([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetchReview = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `https://api.rawg.io/api/games?key=${Api_key}&page=${page}&page_size=20`
-        );
+  const {data, isLoading, error} = useQuery({
+    queryKey:["reviews",page],
+    queryFn:() => fetchReviews(page),
+    keepPreviousData: true,
+  })
 
-        if (!response.ok) throw new Error("Response not OK");
-
-        const data = await response.json();
-        setReview(data.results);
-        console.log(data.results[0]);
-      } catch (error) {
-        console.error("Error fetching review data", error);
-      }finally{
-        setLoading(false);
-      }
-    };
-
-    fetchReview();
-  }, [page]);
+  if(error){
+    return (
+      <p>Error fetching reviews data</p>
+    )
+  }
 
   return (
     <div className="min-h-screen px-6 py-12">
@@ -53,7 +52,7 @@ const Review = () => {
       </div>
 
       {
-        loading ?  (
+        isLoading ?  (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {Array.from({length: 10}).map((_, index) =>(
               <Skeleton  key={index} className="w-full rounded-2xl h-32 bg-gray-500" />
@@ -62,7 +61,7 @@ const Review = () => {
         ):
         (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        {review.slice(0, 10).map((item) => (
+        {data.results.slice(0, 10).map((item: Game) => (
           <div
             key={item.id}
             className="bg-gray-900/60 backdrop-blur-lg rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-5 flex items-start gap-6 hover:scale-[1.02]"

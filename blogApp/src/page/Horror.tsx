@@ -13,6 +13,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Skeleton } from "@/components/ui/skeleton"
+import { useQuery } from "@tanstack/react-query";
 
 type Game = {
   id: number;
@@ -23,39 +24,41 @@ type Game = {
   description_raw: string;
 };
 
+const fetchHorrorGames = async (page:number) =>{
+  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}&tags=horror&page=${page}&page_size=20`);
 
+  if(!response.ok){
+    throw new Error('Failed to fetch horror games');
+  }
+
+  return response.json();
+}
 
 const Horror = () => {
 
-  const [horrorGames, setHorrorGame] = useState<Game[]>([]);
+  
   const [page, setPage] = useState(1);
-  const [loading,  setLoading] = useState<boolean>(false);
 
-  useEffect(() =>{
-    const fetchData = async () =>{
+  const {data, isLoading, error} = useQuery({
+    queryKey: ['horrorGames',page],
+    queryFn: () => fetchHorrorGames(page),
+    keepPreviousData: true,
+  })
 
-      setLoading(true);
-      try{
-        const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}&tags=horror&page=${page}&page_size=20`);
-        const data = await response.json();
+  if(error){
+    return(
+      <p>Error fetching data</p>
+    )
+  }
 
-        setHorrorGame(data.results);
-      }catch(error){
-        console.error("Error fetching horror games", error);
-      }finally{
-        setLoading(false);
-      }
-    }
-    fetchData();
-  },[page]);
-
-
+  const games = data?.results ?? [];
+ 
   return (
      <div className="flex justify-center items-center gap-2 flex-col">
       <h1 className="font-extrabold text-5xl text-center my-10">HORROR</h1>
 
       {
-        loading ? (
+        isLoading ? (
           <div className="w-full px-4 md:px-8 mt-6">
             <Skeleton className="w-full h-[70vh] md:h-[80vh] rounded-3xl bg-gray-500"/>
           </div>
@@ -69,7 +72,7 @@ const Horror = () => {
                 autoplay={{ delay: 3000 }}
                 className="rounded-3xl overflow-hidden shadow-2xl mb-10"
               >
-                {horrorGames.slice(0, 9).map((game) => (
+                {games.slice(0, 9).map((game: Game) => (
                   <SwiperSlide key={game.id}>
                     <div className="relative group h-[70vh] md:h-[80vh] w-full">
                       <img
@@ -100,7 +103,7 @@ const Horror = () => {
             <p className="font-bold text-2xl">Popular Titles</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 mx-5">
         
-         {horrorGames.slice(9, 18).map((game) => (
+         {games.slice(9, 18).map((game: Game) => (
           <div
             key={game.id}   
             className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"

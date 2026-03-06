@@ -12,9 +12,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Categories } from "@/collection/Catogories";
-import { useState, useEffect } from "react";
+import { useState,useEffect} from "react";
 import { Api_key } from "@/Api";
 import AOS from "aos";
+import { useQuery } from "@tanstack/react-query";
 
 
 type Game = {
@@ -26,28 +27,23 @@ type Game = {
 }
 
 
+const fetchGames = async () =>{
+  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}`);
+
+  if(!response.ok){
+    throw new Error("failedto fetch games");
+  }
+
+  return response.json();
+}
+
 const Home = () => {
-  const [results, setResults] = useState<Game[]>([]);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-
-      try {
-        const response = await fetch(
-          `https://api.rawg.io/api/games?key=${Api_key}`,
-        );
-        if (!response.ok) throw new Error("Response not okay!");
-        const data = await response.json();
-        setResults(data.results);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const {data, isLoading, error} = useQuery({
+    queryKey:['games'],
+    queryFn: fetchGames,
+  })
+  
   useEffect(() => {
     AOS.init({
       duration: 1500, // default duration
@@ -56,7 +52,20 @@ const Home = () => {
     });
   }, []);
 
-  const filtered = results.filter(game => game.reviews_count > 500);
+  if(error){
+    return(
+      <p>Error Fetching Games</p>
+    )
+  }
+
+  if(isLoading){
+    return(
+      <p>Loading...</p>
+    )
+  }
+
+
+  const filtered = data.results.filter((game: Game) => game.reviews_count > 500);
 
   return (
     <div className="w-full px-4 md:px-8 mt-6 ">
@@ -105,7 +114,7 @@ const Home = () => {
   data-aos-duration="1500" >
         <h1 className="text-4xl font-bold mb-5">Featured Games</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-        {filtered.slice(0, 6).map((game) => (
+        {filtered.slice(0, 6).map((game: Game) => (
           <div
             key={game.id}
             className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
