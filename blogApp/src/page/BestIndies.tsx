@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import { NavLink } from "react-router-dom";
 
 type Game = {
   id: number;
@@ -98,43 +99,49 @@ const BestIndies = () => {
                   <p className="font-bold text-3xl">Popular Titles</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 mx-5">
         
-         {games.slice(9, 18).map((game: Game) => (
-          <div
-            key={game.id}   
-            className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-            >   
-            <img
-              src={game.background_image}
-              alt={game.name}
-               className="h-48 w-full object-cover hover:scale-105 transition-transform duration-500"
-            />
-            <div className="p-4 text-white">
-              <span className="text-yellow-400 font-semibold">
-                ⭐ {game.rating}
-              </span>
-              <h2 className="text-lg font-bold mt-2">{game.name}</h2>
+         {games.slice(10, 19).map((game: Game) => (
+          <NavLink to={`/GameDetails/${game.id}`} key={game.id}>
+            <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <img
+                      src={game.background_image}
+                      alt={game.name}
+                      className="h-48 w-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="p-4 text-white">
+                      <span className="text-yellow-400 font-semibold">
+                        ⭐ {game.rating}
+                      </span>
+                      <h2 className="text-lg font-bold mt-2">
+                        {game.name}
+                      </h2>
+                    </div>
+                  </div>
+                  </NavLink>
+                ))}
+              </div>
+        
+        
+              <div className="flex gap-4 my-12">
+                <button
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={page === 1}
+                  className="px-6 py-2 bg-gray-800 text-white rounded-xl disabled:opacity-50"
+                >
+                  Previous
+                </button>
+        
+                <span className="px-6 py-2 text-lg font-bold">
+                  Page {page}
+                </span>
+        
+                <button
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="px-6 py-2 bg-gray-800 text-white rounded-xl"
+                >
+                  Next
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex gap-4 my-12">
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-6 py-2 bg-gray-800 text-white rounded-xl disabled:opacity-50"
-          >
-          Previous
-        </button>
-        <span className="px-6 py-2 text-lg font-bold">page: {page}</span>
-
-        <button onClick={() => setPage((prev) => Math.max(prev + 1 , 1))}
-          className="px-6 py-2 bg-gray-800 text-white rounded-xl"
-          >
-          Next
-        </button>
-      </div>
-     
-    </div>
   )
 }
 

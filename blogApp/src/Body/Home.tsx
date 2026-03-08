@@ -16,6 +16,7 @@ import { useState,useEffect} from "react";
 import { Api_key } from "@/Api";
 import AOS from "aos";
 import { useQuery } from "@tanstack/react-query";
+import Contact from "./Contact";
 
 
 type Game = {
@@ -134,7 +135,7 @@ const Home = () => {
         ))}
       </div>
        </div>
-       
+       <Contact />
     </div>
   );
 };

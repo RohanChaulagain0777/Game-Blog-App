@@ -1,59 +1,93 @@
-import Navbar from "./Navbar/Navbar"
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Navbar from "./Navbar/Navbar";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Home from "./Body/Home";
-import About from "./Body/About";
-import Review from "./Body/Review";
-import "aos/dist/aos.css";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MoveUpIcon } from "lucide-react";
-import Contact from "./Body/Contact";
 import Footer from "./Footer/Footer";
-import Horror from "./page/Horror";
-import Action from "./page/Action";
-import Sci_fi from "./page/Sci-Fi";
-import BestIndies  from "./page/BestIndies";
+import { Skeleton } from "./components/ui/skeleton";
 
-function App() {
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+const About = lazy(() => import("./Body/About"));
+const Review = lazy(() => import("./Body/Review"));
+const Horror = lazy(() => import("./page/Horror"));
+const Action = lazy(() => import("./page/Action"));
+const Sci_fi = lazy(() => import("./page/Sci-Fi"));
+const BestIndies = lazy(() => import("./page/BestIndies"));
+const SavedGame = lazy(() => import("./page/SavedGame"));
+const GameDetails = lazy(() => import("./page/GameDetails"));
+
+function AppContent() {
+  const [isVisible, setIsVisible] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-  const toggleVisibility = () =>{
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) setIsVisible(true);
+      else setIsVisible(false);
+    };
 
-    if(window.pageYOffset > 300){
-      setIsVisible(true)
-    }else{
-      setIsVisible(false)
-    }
-  }
+    window.addEventListener("scroll", toggleVisibility);
 
-  window.addEventListener("scroll",toggleVisibility)
-  },[])
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
 
-  const scrollToTop = () =>{
+  const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
-    })
-  }
+      behavior: "smooth",
+    });
+  };
+
+  const isGameDetail =
+    location.pathname.startsWith("/GameDetails") ||
+    location.pathname.startsWith("/SavedGame");
 
   return (
-    <BrowserRouter >
+    <>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<><Home/> <Contact /></>} />
-        <Route path="/about" element={<About />} />
-        <Route path="/reviews" element={<Review />} />
-        <Route path="/Horror" element={<Horror />} />
-        <Route path="/Action" element={<Action />} />
-        <Route path="/Sci-Fi" element={<Sci_fi />} />
-        <Route path="/BestIndies" element={<BestIndies />} />
-      </Routes>
+
+      <Suspense
+        fallback={
+          <div className="p-10">
+            <Skeleton className="h-[300px] w-full mb-6" />
+            <Skeleton className="h-8 w-[250px] mb-4" />
+            <Skeleton className="h-6 w-[400px]" />
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/reviews" element={<Review />} />
+          <Route path="/Horror" element={<Horror />} />
+          <Route path="/Action" element={<Action />} />
+          <Route path="/Sci-Fi" element={<Sci_fi />} />
+          <Route path="/BestIndies" element={<BestIndies />} />
+          <Route path="/SavedGame" element={<SavedGame />} />
+          <Route path="/GameDetails/:id" element={<GameDetails />} />
+        </Routes>
+      </Suspense>
+
       {isVisible && (
-        <button onClick={scrollToTop} className="fixed bottom-6 right-6 bg-red-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition"><MoveUpIcon size={20}/></button>
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 bg-red-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition"
+        >
+          <MoveUpIcon size={20} />
+        </button>
       )}
-      <Footer />
-    </BrowserRouter>
-      )
+
+      {!isGameDetail && <Footer />}
+    </>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+export default App;

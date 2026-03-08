@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Skeleton } from "@/components/ui/skeleton"
 import { useQuery } from "@tanstack/react-query";
+import { NavLink } from "react-router-dom";
 
 type Game = {
   id: number;
@@ -104,10 +105,8 @@ const Action = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 mx-5">
 
         {games.slice(10, 19).map((game: Game) => (
-          <div
-            key={game.id}
-            className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-          >
+  <NavLink to={`/GameDetails/${game.id}`} key={game.id}>
+    <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
             <img
               src={game.background_image}
               alt={game.name}
@@ -122,6 +121,7 @@ const Action = () => {
               </h2>
             </div>
           </div>
+          </NavLink>
         ))}
       </div>
 

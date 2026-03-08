@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Search } from "lucide-react";
 import { Api_key } from "@/Api";
+import { Store } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,6 +111,7 @@ const Navbar = () => {
         </div>
 
         <ModeToggle />
+         <NavLink to={"/SavedGame"} ><Store size={20}/></NavLink>
       </div>
     </nav>
   );
