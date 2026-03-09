@@ -36,7 +36,9 @@ const GameDetails = () => {
   const addToSavedGames = () => {
     if (!data) return;
 
-    const savedGames = JSON.parse(localStorage.getItem("savedGames") || "[]");
+    const savedGames: GameDetailsType[] = JSON.parse(
+      localStorage.getItem("savedGames") || "[]"
+    );
 
     const gameToSave: GameDetailsType = {
       id: data.id,
@@ -47,35 +49,55 @@ const GameDetails = () => {
       released: data.released,
     };
 
+    const existGame = savedGames.some((game) => game.id === gameToSave.id);
+
+    if (existGame) {
+      navigate("/SavedGame");
+      return;
+    }
+
     const updatedGames = [...savedGames, gameToSave];
 
     localStorage.setItem("savedGames", JSON.stringify(updatedGames));
+
+    navigate("/SavedGame");
   };
 
   if (isLoading) return <p>Loading...</p>;
-
   if (error) return <p>Error loading game</p>;
 
   return (
     <div className="flex flex-col gap-6 p-10">
       <h1 className="text-4xl font-bold text-center p-2">{data?.name}</h1>
-      <div className="flex gap-12">    
-      <img src={data?.background_image} alt={data?.name} className="w-100 h-100 rounded-2xl"/>
 
-      <div className="flex flex-col gap-4 py-5">
-        <p className="text-gray-600 ">{data?.released}</p>
-        <span className="font-semibold text-lg">⭐ Rating: {data?.rating}</span>
-        <p className="text-gray-600">{data?.description_raw}</p>
+      <div className="flex gap-12">
+        <img
+          src={data?.background_image}
+          alt={data?.name}
+          className="w-100 h-100 rounded-2xl"
+        />
+
+        <div className="flex flex-col gap-4 py-5">
+          <p className="text-gray-600">{data?.released}</p>
+          <span className="font-semibold text-lg">⭐ Rating: {data?.rating}</span>
+          <p className="text-gray-600">{data?.description_raw}</p>
+        </div>
       </div>
-      </div>
+
       <div className="flex justify-center items-center gap-12">
-        <button className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
-        onClick={() => navigate(-1)}
-        >Go back</button>
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
+          onClick={() => navigate(-1)}
+        >
+          Go back
+        </button>
 
-        <button className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
           onClick={addToSavedGames}
-        >save game</button>
+        >
+          save game
+        </button>
       </div>
     </div>
   );
