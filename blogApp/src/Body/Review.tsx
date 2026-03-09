@@ -13,7 +13,7 @@ type Game = {
 };
 
 const fetchReviews = async (page: number) =>{
-  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}&page=${page}&page_size=20`
+  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}&page=${page}&page_size=10`
   );
 
   if(!response.ok){

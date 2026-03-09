@@ -1,4 +1,4 @@
-import { Api_key } from "@/Api";
+import {Api_key} from "@/Api"
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 

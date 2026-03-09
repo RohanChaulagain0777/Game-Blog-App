@@ -8,7 +8,7 @@ const Footer = () => {
               <p>.</p>
               <NavLink to="/about" className="hover:text-green-500">About</NavLink>
               <p>.</p>
-              <NavLink to="/review" className="hover:text-green-500">Review</NavLink>
+              <NavLink to="/reviews" className="hover:text-green-500">Review</NavLink>
             </div>
             <p className="text-sm font-semibold">&copy; {new Date().getFullYear()} indizGamez</p>
         </div>     
