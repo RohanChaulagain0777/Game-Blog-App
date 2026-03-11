@@ -15,6 +15,7 @@ const Adventure = lazy(() => import("./page/Adventure"));
 const BestIndies = lazy(() => import("./page/BestIndies"));
 const SavedGame = lazy(() => import("./page/SavedGame"));
 const GameDetails = lazy(() => import("./page/GameDetails"));
+const Search = lazy(() => import("./page/Search"));
 
 function AppContent() {
   const [isVisible, setIsVisible] = useState(false);
@@ -40,7 +41,8 @@ function AppContent() {
 
   const isGameDetail =
     location.pathname.startsWith("/GameDetails") ||
-    location.pathname.startsWith("/SavedGame");
+    location.pathname.startsWith("/SavedGame") ||
+    location.pathname.startsWith("/search");
 
   return (
     <>
@@ -65,6 +67,7 @@ function AppContent() {
           <Route path="/BestIndies" element={<BestIndies />} />
           <Route path="/SavedGame" element={<SavedGame />} />
           <Route path="/GameDetails/:id" element={<GameDetails />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </Suspense>
 

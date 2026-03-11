@@ -63,7 +63,7 @@ const GameDetails = () => {
     navigate("/SavedGame");
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p className="text-center font-lg mt-10">Loading...</p>;
   if (error) return <p>Error loading game</p>;
 
   return (
