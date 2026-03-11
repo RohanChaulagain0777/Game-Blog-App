@@ -79,7 +79,6 @@ const Search = () => {
           {results.slice(0, 5).map((game: Game) => (
             <NavLink to={`/GameDetails/${game.id}`} key={game.id}>
             <div
-              key={game.id}
               onClick={() => handleGameClick(game.id)} 
               className="flex items-center gap-3 py-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer rounded-md"
             >
