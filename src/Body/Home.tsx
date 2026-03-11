@@ -16,7 +16,7 @@ import { useState,useEffect} from "react";
 import AOS from "aos";
 import { useQuery } from "@tanstack/react-query";
 import Contact from "./Contact";
-const Api_key = import.meta.env.VITE_API_KEY;
+
 
 
 
@@ -30,7 +30,7 @@ type Game = {
 
 
 const fetchGames = async () =>{
-  const response = await fetch(`https://api.rawg.io/api/games?key=${Api_key}`);
+  const response = await fetch(`https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}`);
 
   if(!response.ok){
     throw new Error("failedto fetch games");
@@ -112,7 +112,7 @@ const Home = () => {
         ))}
       </Swiper>
 
-      <div className="text-center my-10 h-[100vh]" data-aos="fade-up"
+      <div className="text-center my-10 min-h-[100vh]" data-aos="fade-up"
   data-aos-duration="1500" >
         <h1 className="text-4xl font-bold mb-5">Featured Games</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">

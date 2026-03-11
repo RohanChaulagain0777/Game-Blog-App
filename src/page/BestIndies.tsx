@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   Navigation,
   Pagination,
@@ -48,6 +48,14 @@ const BestIndies = () => {
   })
   
   const games = data?.results ?? [];
+
+
+
+  if(error){
+    return(
+      <p>Error fetching indiz game data</p>
+    )
+  }
 
   return (
      <div className="flex justify-center items-center gap-2 flex-col">

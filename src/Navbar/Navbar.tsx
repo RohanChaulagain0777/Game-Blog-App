@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Store } from "lucide-react";
+import Logo from "@/assets/Gemini_Generated_Image_42xe4d42xe4d42xe-removebg-preview.png"
 
 const Navbar = () => {
 
@@ -18,7 +19,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-50 flex justify-between items-center m-10">
       <img
-        src="/src/assets/Gemini_Generated_Image_42xe4d42xe4d42xe-removebg-preview.png"
+        src={Logo}
         className="w-30"
       />
 

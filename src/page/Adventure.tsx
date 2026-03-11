@@ -25,7 +25,7 @@ type Game = {
   description_raw: string;
 };
 
-const fetchSciFiGames = async (page:number) =>{
+const fetchAdventureGames = async (page:number) =>{
           const response = await fetch(`https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&genres=adventure&page=${page}&page_size=20`);
 
           if(!response.ok){
@@ -42,13 +42,13 @@ const Sci_Fi = () => {
 
     const {data, isLoading, error} = useQuery({
       queryKey: ['adventureGames', page],
-      queryFn: () => fetchSciFiGames(page),
+      queryFn: () => fetchAdventureGames(page),
       placeholderData: keepPreviousData,
     })
 
     if(error){
       return (
-        <p>Error fetching scifi games</p>
+        <p>Error fetching adventure games</p>
       )
     }
 

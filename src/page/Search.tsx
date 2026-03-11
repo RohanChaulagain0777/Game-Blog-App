@@ -57,7 +57,7 @@ const Search = () => {
   const handleGameClick = (id: number) => {
     setOpen(false)
     setSearchValue("")
-    navigate(`/game/${id}`)
+   navigate(`/GameDetails/${id}`)
   }
 
   return (

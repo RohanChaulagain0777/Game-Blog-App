@@ -1,6 +1,7 @@
 import { Mail } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import ContactImg from "@/assets/Contact.jfif"
 
 const Contact = () => {
 
@@ -97,7 +98,7 @@ const Contact = () => {
 
         </form>
         <div>
-          <img src="src/assets/Contact.jfif" className='w-100 h-80 rounded-lg' />
+          <img src={ContactImg} className='w-100 h-80 rounded-lg' />
         </div>
       </div>
     </div>
